@@ -10,20 +10,21 @@
 [sub_resource type="GDScript" id=2]
 script/source = "extends RigidBody2D
 
-var movement = 100
+var movement = 300
 var deadzone = 0.5
+#var drag = 0.7
 
-var hp = 100
+var hp = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Input.connect(\"joy_connection_changed\",self,\"joy_con_changed\")
 	self.mode = MODE_CHARACTER
-	self.linear_damp = 0.5
 	self.mass = 10
 	
 func _physics_process(delta):
 	self.gravity_scale = 0
+	self.linear_velocity *= drag
 	
 	if self.linear_velocity.length() <= (1.5*movement) and self.applied_force.length() == 0:
 		self.linear_velocity = get_input()
@@ -42,10 +43,9 @@ func get_input():
 	return motion*movement
 	
 func hit(dir):
-	print(\"hp\")
-	hp -= 10 
-	self.linear_velocty = Vector2(0,0)
-	self.apply_central_impulse(dir*10*1/hp)
+	hp -= 0.1
+	self.linear_velocity = dir*movement+dir*10/hp
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
@@ -54,13 +54,10 @@ func hit(dir):
 [node name="Node2D" type="Node2D"]
 
 [node name="Player1" type="RigidBody2D" parent="."]
-position = Vector2( 61.9025, 47.2414 )
+position = Vector2( 158.806, 123.134 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_group_": true
-}
 
-[node name="Sprite" type="Sprite" parent="Player1"]
+[node name="Sprite4" type="Sprite" parent="Player1"]
 scale = Vector2( 0.32, 0.32 )
 texture = ExtResource( 2 )
 
@@ -68,25 +65,22 @@ texture = ExtResource( 2 )
 visible = false
 shape = SubResource( 1 )
 
-[node name="Sprite2" type="Sprite" parent="Player1"]
-position = Vector2( 14.6611, 0.407242 )
+[node name="Sprite3" type="Sprite" parent="Player1"]
+position = Vector2( 10.7824, 0.34613 )
 scale = Vector2( 0.185493, 0.172767 )
 texture = ExtResource( 2 )
 script = ExtResource( 3 )
 
 [node name="Player2" type="RigidBody2D" parent="."]
 position = Vector2( 906.806, 475.339 )
+can_sleep = false
 script = SubResource( 2 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="Sprite" type="Sprite" parent="Player2"]
 scale = Vector2( 0.32, 0.32 )
 texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player2"]
-visible = false
 shape = SubResource( 1 )
 
 [node name="Sprite2" type="Sprite" parent="Player2"]

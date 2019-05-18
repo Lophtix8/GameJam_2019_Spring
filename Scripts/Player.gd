@@ -1,15 +1,15 @@
 extends RigidBody2D
 
-var movement = 100
+var movement = 300
 var deadzone = 0.5
 
-var hp = 100
+var hp = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Input.connect("joy_connection_changed",self,"joy_con_changed")
 	self.mode = MODE_CHARACTER
-	self.linear_damp = 0.5
+	self.linear_damp = 0.8
 	self.mass = 10
 	
 func _physics_process(delta):
@@ -32,9 +32,9 @@ func get_input():
 	return motion*movement
 	
 func hit(dir):
-	hp -= 10 
-	self.linear_velocty = Vector2(0,0)
-	self.apply_central_impulse(dir*100*1/hp)
+	hp -= 0.1
+	self.linear_velocity = dir*movement*sqrt(2)+dir*10/hp
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass

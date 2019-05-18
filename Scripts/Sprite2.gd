@@ -28,7 +28,7 @@ func _physics_process(delta):
 	if cur_state and not prev_state:
 		var bullet = bullet_scene.instance()
 		for bullet_kin in bullet.get_children():
-			bullet_kin.pos = self.position*1.5 + self.get_parent().position
+			bullet_kin.pos = self.position*1.8 + self.get_parent().position
 			bullet_kin.dir = self.position
 		
 		self.get_parent().get_parent().add_child(bullet)
