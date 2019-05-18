@@ -1,18 +1,102 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://Graphics/gun.png" type="Texture" id=2]
 [ext_resource path="res://Scripts/Sprite2.gd" type="Script" id=3]
-[ext_resource path="res://Graphics/BasicTileSet.tres" type="TileSet" id=4]
+[ext_resource path="res://Graphics/Up/IdleU.PNG" type="Texture" id=4]
+[ext_resource path="res://Graphics/Up/WalkingU1.PNG" type="Texture" id=5]
+[ext_resource path="res://Graphics/Up/WalkingU2.PNG" type="Texture" id=6]
+[ext_resource path="res://Graphics/UpRight/IdleUR2.PNG" type="Texture" id=7]
+[ext_resource path="res://Graphics/UpRight/IdleUR.PNG" type="Texture" id=8]
+[ext_resource path="res://Graphics/UpRight/WalkingUR1.PNG" type="Texture" id=9]
+[ext_resource path="res://Graphics/UpRight/WalkingUR3.PNG" type="Texture" id=10]
+[ext_resource path="res://Graphics/Right/IdleR.PNG" type="Texture" id=11]
+[ext_resource path="res://Graphics/Right/MovingR.PNG" type="Texture" id=12]
+[ext_resource path="res://Graphics/Right/WalkingR1.PNG" type="Texture" id=13]
+[ext_resource path="res://Graphics/Right/WalkingR3.PNG" type="Texture" id=14]
+[ext_resource path="res://Graphics/DownRight/IdleDR.PNG" type="Texture" id=15]
+[ext_resource path="res://Graphics/DownRight/IdleDR2.PNG" type="Texture" id=16]
+[ext_resource path="res://Graphics/DownRight/WalkingDR1.PNG" type="Texture" id=17]
+[ext_resource path="res://Graphics/DownRight/WalkingDR2.PNG" type="Texture" id=18]
+[ext_resource path="res://Graphics/Down/Idle.PNG" type="Texture" id=19]
+[ext_resource path="res://Graphics/Down/Idle2.PNG" type="Texture" id=20]
+[ext_resource path="res://Graphics/Down/WalkingDown3.PNG" type="Texture" id=21]
+[ext_resource path="res://icon.png" type="Texture" id=22]
+[ext_resource path="res://Graphics/BasicTileSet.tres" type="TileSet" id=23]
+[ext_resource path="res://Scripts/Camera2D.gd" type="Script" id=24]
 
 [sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 10, 17 )
+
+[sub_resource type="SpriteFrames" id=11]
+animations = [ {
+"frames": [ ExtResource( 5 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 4.0
+} ]
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ ExtResource( 7 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "default",
+"speed": 2.0
+} ]
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ ExtResource( 9 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "default",
+"speed": 4.0
+} ]
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ) ],
+"loop": true,
+"name": "default",
+"speed": 6.0
+} ]
+
+[sub_resource type="SpriteFrames" id=8]
+animations = [ {
+"frames": [ ExtResource( 15 ), ExtResource( 16 ) ],
+"loop": true,
+"name": "default",
+"speed": 2.0
+} ]
+
+[sub_resource type="SpriteFrames" id=9]
+animations = [ {
+"frames": [ ExtResource( 17 ), ExtResource( 18 ) ],
+"loop": true,
+"name": "default",
+"speed": 4.0
+} ]
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 19 ), ExtResource( 20 ) ],
+"loop": true,
+"name": "default",
+"speed": 1.0
+} ]
+
+[sub_resource type="SpriteFrames" id=10]
+animations = [ {
+"frames": [ ExtResource( 21 ), ExtResource( 21 ) ],
+"loop": true,
+"name": "default",
+"speed": 1.0
+} ]
 
 [sub_resource type="GDScript" id=2]
 script/source = "extends RigidBody2D
 
-var movement = 300
+var movement = 100
 var deadzone = 0.5
-#var drag = 0.7
 
 var hp = 1
 
@@ -20,11 +104,11 @@ var hp = 1
 func _ready():
 	Input.connect(\"joy_connection_changed\",self,\"joy_con_changed\")
 	self.mode = MODE_CHARACTER
+	self.linear_damp = 10
 	self.mass = 10
 	
 func _physics_process(delta):
 	self.gravity_scale = 0
-	self.linear_velocity *= drag
 	
 	if self.linear_velocity.length() <= (1.5*movement) and self.applied_force.length() == 0:
 		self.linear_velocity = get_input()
@@ -32,19 +116,60 @@ func _physics_process(delta):
 func get_input():
 	var motion = Vector2(0,0)
 	if Input.get_connected_joypads().size() > 0:
-		var axesM = [0,0]
-		var axesD = [0,0]
 		motion.x = Input.get_joy_axis(1,JOY_ANALOG_LX)
 		motion.y = Input.get_joy_axis(1,JOY_ANALOG_LY)
 		
 		if motion.length() < deadzone:
 			motion *= 0
 		
-	return motion*movement
+	return motion.normalized()*movement
 	
 func hit(dir):
 	hp -= 0.1
-	self.linear_velocity = dir*movement+dir*10/hp
+	self.linear_velocity = dir*movement+dir*30/hp
+	
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+"
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends Sprite
+# Declare member variables here. Examples:
+
+var dir = Vector2(1,0)
+var rad = 10
+var bullet_speed = 60
+var dead_zone = 0.2
+
+var cur_state = false
+var prev_state = false
+
+var bullet_scene = preload(\"res://Scenes/Bullet.tscn\")
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	self.position = dir.normalized()*rad
+	pass # Replace with function body.
+	
+func _physics_process(delta):
+	dir.x = Input.get_joy_axis(1, JOY_ANALOG_RX)
+	dir.y = Input.get_joy_axis(1, JOY_ANALOG_RY)
+	
+	if dir.length() > dead_zone:
+		self.position = dir.normalized()*rad
+	
+	cur_state = Input.is_joy_button_pressed(1,JOY_BUTTON_5)
+	
+	if cur_state and not prev_state:
+		var bullet = bullet_scene.instance()
+		for bullet_kin in bullet.get_children():
+			bullet_kin.pos = self.position*2 + self.get_parent().position
+			bullet_kin.dir = self.position
+		
+		self.get_parent().get_parent().add_child(bullet)
+	
+	prev_state = cur_state
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -57,19 +182,92 @@ func hit(dir):
 position = Vector2( 158.806, 123.134 )
 script = ExtResource( 1 )
 
-[node name="Sprite4" type="Sprite" parent="Player1"]
-scale = Vector2( 0.32, 0.32 )
-texture = ExtResource( 2 )
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player1"]
-visible = false
 shape = SubResource( 1 )
 
 [node name="Sprite3" type="Sprite" parent="Player1"]
-position = Vector2( 10.7824, 0.34613 )
-scale = Vector2( 0.185493, 0.172767 )
+position = Vector2( 10, 10 )
+scale = Vector2( 0.1, 0.1 )
 texture = ExtResource( 2 )
 script = ExtResource( 3 )
+
+[node name="Up" type="Node2D" parent="Player1"]
+editor/display_folded = true
+show_behind_parent = true
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Idle" type="Sprite" parent="Player1/Up"]
+visible = false
+texture = ExtResource( 4 )
+
+[node name="Move" type="AnimatedSprite" parent="Player1/Up"]
+visible = false
+scale = Vector2( 1, 1 )
+frames = SubResource( 11 )
+playing = true
+
+[node name="Sides_up" type="Node2D" parent="Player1"]
+editor/display_folded = true
+show_behind_parent = true
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Idle" type="AnimatedSprite" parent="Player1/Sides_up"]
+visible = false
+scale = Vector2( 1, 1 )
+frames = SubResource( 6 )
+frame = 1
+playing = true
+
+[node name="Move" type="AnimatedSprite" parent="Player1/Sides_up"]
+visible = false
+frames = SubResource( 7 )
+playing = true
+
+[node name="Sides" type="Node2D" parent="Player1"]
+editor/display_folded = true
+show_behind_parent = true
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Idle" type="Sprite" parent="Player1/Sides"]
+visible = false
+scale = Vector2( 1, 1 )
+texture = ExtResource( 11 )
+
+[node name="Move" type="AnimatedSprite" parent="Player1/Sides"]
+visible = false
+frames = SubResource( 4 )
+frame = 2
+playing = true
+
+[node name="Sides_down" type="Node2D" parent="Player1"]
+editor/display_folded = true
+show_behind_parent = true
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Idle" type="AnimatedSprite" parent="Player1/Sides_down"]
+visible = false
+scale = Vector2( 1, 1 )
+frames = SubResource( 8 )
+playing = true
+
+[node name="Move" type="AnimatedSprite" parent="Player1/Sides_down"]
+visible = false
+frames = SubResource( 9 )
+playing = true
+
+[node name="Down" type="Node2D" parent="Player1"]
+editor/display_folded = true
+show_behind_parent = true
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Idle" type="AnimatedSprite" parent="Player1/Down"]
+frames = SubResource( 5 )
+
+[node name="Move" type="AnimatedSprite" parent="Player1/Down"]
+visible = false
+frames = SubResource( 10 )
+frame = 1
+playing = true
 
 [node name="Player2" type="RigidBody2D" parent="."]
 position = Vector2( 906.806, 475.339 )
@@ -78,7 +276,7 @@ script = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="Player2"]
 scale = Vector2( 0.32, 0.32 )
-texture = ExtResource( 2 )
+texture = ExtResource( 22 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player2"]
 shape = SubResource( 1 )
@@ -86,9 +284,15 @@ shape = SubResource( 1 )
 [node name="Sprite2" type="Sprite" parent="Player2"]
 position = Vector2( 14.6611, 0.407242 )
 scale = Vector2( 0.185493, 0.172767 )
-texture = ExtResource( 2 )
+texture = ExtResource( 22 )
+script = SubResource( 3 )
 
 [node name="TileMap" type="TileMap" parent="."]
-tile_set = ExtResource( 4 )
+tile_set = ExtResource( 23 )
 format = 1
 tile_data = PoolIntArray( -1, 0, 0, -65536, 0, 0, -65535, 0, 0, -65534, 0, 0, -65533, 0, 0, -65532, 0, 0, -65531, 0, 0, -65530, 0, 0, -65529, 0, 0, -65528, 0, 0, -65527, 0, 0, -65526, 0, 0, -65525, 0, 0, -65524, 0, 0, -65523, 0, 0, -65522, 0, 0, -65521, 0, 0, -65520, 0, 0, 65535, 0, 0, 16, 0, 0, 131071, 0, 0, 65552, 0, 0, 196607, 0, 0, 131088, 0, 0, 262143, 0, 0, 196624, 0, 0, 327679, 0, 0, 262160, 0, 0, 393215, 0, 0, 327696, 0, 0, 458751, 0, 0, 393232, 0, 0, 524287, 0, 0, 458768, 0, 0, 589823, 0, 0, 524304, 0, 0, 655359, 0, 0, 589824, 0, 0, 589825, 0, 0, 589826, 0, 0, 589827, 0, 0, 589828, 0, 0, 589829, 0, 0, 589830, 0, 0, 589831, 0, 0, 589832, 0, 0, 589833, 0, 0, 589834, 0, 0, 589835, 0, 0, 589836, 0, 0, 589837, 0, 0, 589838, 0, 0, 589839, 0, 0, 589840, 0, 0 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 509.047, 274.361 )
+current = true
+script = ExtResource( 24 )
