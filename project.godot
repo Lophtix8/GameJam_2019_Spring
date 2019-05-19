@@ -18,7 +18,3 @@ _global_script_class_icons={
 config/name="GameJam_2019(Spring)"
 run/main_scene="res://Scenes/Main.tscn"
 config/icon="res://icon.png"
-
-[rendering]
-
-environment/default_environment="res://default_env.tres"

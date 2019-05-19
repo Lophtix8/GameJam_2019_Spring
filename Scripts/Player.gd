@@ -43,9 +43,8 @@ func get_input():
 			change_sprite = false
 		
 		sec_vec.y = abs(sec_vec.y)
-		print(sec_vec.angle())
 		for i in range(5):
-			if sec_vec.angle() < 1 + i*PI/8:
+			if sec_vec.angle() < PI/8 + i*PI/4:
 				animation(i, change_sprite)
 				break
 		
@@ -55,6 +54,8 @@ func get_input():
 func hit(dir):
 	hp -= 0.1
 	self.linear_velocity = dir*movement+dir*30/hp
+	if hp == 0:
+		self.queue_free()
 	
 func animation(dir, chg_sprite):
 	if not chg_sprite:

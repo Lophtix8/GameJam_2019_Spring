@@ -10,6 +10,7 @@ func _ready():
 	self.gravity_scale = 0
 	self.position = pos
 	self.linear_velocity = dir*vel
+	self.rotation = dir.angle()
 	self.contact_monitor = true
 	self.contacts_reported = 3
 
