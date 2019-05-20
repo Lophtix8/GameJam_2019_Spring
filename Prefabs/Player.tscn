@@ -1,0 +1,185 @@
+[gd_scene load_steps=32 format=2]
+
+[ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
+[ext_resource path="res://Graphics/gun.png" type="Texture" id=2]
+[ext_resource path="res://Scripts/Gun.gd" type="Script" id=3]
+[ext_resource path="res://Graphics/Up/IdleU.PNG" type="Texture" id=4]
+[ext_resource path="res://Graphics/Up/WalkingU1.PNG" type="Texture" id=5]
+[ext_resource path="res://Graphics/Up/WalkingU2.PNG" type="Texture" id=6]
+[ext_resource path="res://Graphics/UpRight/IdleUR2.PNG" type="Texture" id=7]
+[ext_resource path="res://Graphics/UpRight/IdleUR.PNG" type="Texture" id=8]
+[ext_resource path="res://Graphics/UpRight/WalkingUR1.PNG" type="Texture" id=9]
+[ext_resource path="res://Graphics/UpRight/WalkingUR3.PNG" type="Texture" id=10]
+[ext_resource path="res://Graphics/Right/IdleR.PNG" type="Texture" id=11]
+[ext_resource path="res://Graphics/Right/MovingR.PNG" type="Texture" id=12]
+[ext_resource path="res://Graphics/Right/WalkingR1.PNG" type="Texture" id=13]
+[ext_resource path="res://Graphics/Right/WalkingR3.PNG" type="Texture" id=14]
+[ext_resource path="res://Graphics/DownRight/IdleDR.PNG" type="Texture" id=15]
+[ext_resource path="res://Graphics/DownRight/IdleDR2.PNG" type="Texture" id=16]
+[ext_resource path="res://Graphics/DownRight/WalkingDR1.PNG" type="Texture" id=17]
+[ext_resource path="res://Graphics/DownRight/WalkingDR2.PNG" type="Texture" id=18]
+[ext_resource path="res://Graphics/Down/Idle.PNG" type="Texture" id=19]
+[ext_resource path="res://Graphics/Down/Idle2.PNG" type="Texture" id=20]
+[ext_resource path="res://Graphics/Down/WalkingDown3.PNG" type="Texture" id=21]
+[ext_resource path="res://Graphics/Down/WalkingDown1.PNG" type="Texture" id=22]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 10, 17 )
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 5 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 4.0
+} ]
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 7 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "default",
+"speed": 2.0
+} ]
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ ExtResource( 9 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "default",
+"speed": 4.0
+} ]
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ) ],
+"loop": true,
+"name": "default",
+"speed": 6.0
+} ]
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ ExtResource( 15 ), ExtResource( 16 ) ],
+"loop": true,
+"name": "default",
+"speed": 2.0
+} ]
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ ExtResource( 17 ), ExtResource( 18 ) ],
+"loop": true,
+"name": "default",
+"speed": 4.0
+} ]
+
+[sub_resource type="SpriteFrames" id=8]
+animations = [ {
+"frames": [ ExtResource( 19 ), ExtResource( 20 ) ],
+"loop": true,
+"name": "default",
+"speed": 1.0
+} ]
+
+[sub_resource type="SpriteFrames" id=9]
+animations = [ {
+"frames": [ ExtResource( 21 ), ExtResource( 22 ) ],
+"loop": true,
+"name": "default",
+"speed": 4.0
+} ]
+
+[node name="Player1" type="RigidBody2D"]
+editor/display_folded = true
+position = Vector2( 287.254, 298.783 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Sprite3" type="Sprite" parent="."]
+position = Vector2( 10, 10 )
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 2 )
+script = ExtResource( 3 )
+
+[node name="Up" type="Node2D" parent="."]
+editor/display_folded = true
+show_behind_parent = true
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Idle" type="Sprite" parent="Up"]
+visible = false
+texture = ExtResource( 4 )
+
+[node name="Move" type="AnimatedSprite" parent="Up"]
+visible = false
+frames = SubResource( 2 )
+frame = 1
+playing = true
+
+[node name="Sides_up" type="Node2D" parent="."]
+editor/display_folded = true
+show_behind_parent = true
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Idle" type="AnimatedSprite" parent="Sides_up"]
+visible = false
+frames = SubResource( 3 )
+playing = true
+
+[node name="Move" type="AnimatedSprite" parent="Sides_up"]
+visible = false
+frames = SubResource( 4 )
+frame = 1
+playing = true
+
+[node name="Sides" type="Node2D" parent="."]
+editor/display_folded = true
+show_behind_parent = true
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Idle" type="Sprite" parent="Sides"]
+visible = false
+texture = ExtResource( 11 )
+
+[node name="Move" type="AnimatedSprite" parent="Sides"]
+visible = false
+frames = SubResource( 5 )
+frame = 1
+playing = true
+
+[node name="Sides_down" type="Node2D" parent="."]
+editor/display_folded = true
+show_behind_parent = true
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Idle" type="AnimatedSprite" parent="Sides_down"]
+visible = false
+frames = SubResource( 6 )
+frame = 1
+playing = true
+
+[node name="Move" type="AnimatedSprite" parent="Sides_down"]
+visible = false
+frames = SubResource( 7 )
+frame = 1
+playing = true
+
+[node name="Down" type="Node2D" parent="."]
+editor/display_folded = true
+show_behind_parent = true
+scale = Vector2( 0.05, 0.05 )
+
+[node name="Idle" type="AnimatedSprite" parent="Down"]
+frames = SubResource( 8 )
+
+[node name="Move" type="AnimatedSprite" parent="Down"]
+visible = false
+frames = SubResource( 9 )
+frame = 1
+playing = true

@@ -9,10 +9,12 @@ var zoomMin = 0.5
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	players = self.get_parent().get_children()
+	pass
 	
 
 func _physics_process(delta):
+	if players == []:
+		players = self.get_parent().get_child(3).get_children()
 	if players != []:
 		pos_mid = (players[0].position + players[1].position)/2
 		pos_dif = (players[0].position - players[1].position).length()

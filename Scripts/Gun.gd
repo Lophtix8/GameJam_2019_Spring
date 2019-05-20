@@ -10,8 +10,8 @@ var cur_state = false
 var prev_state = false
 var chg_sprite = true
 
-var bullet_scene = preload("res://Scenes/Bullet.tscn")
-
+var bullet_scene = preload("res://Prefabs/Bullet.tscn")
+onready var controller = get_parent().controller
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	self.position = dir.normalized()*rad
@@ -19,14 +19,14 @@ func _ready():
 	
 func _physics_process(delta):
 	chg_sprite = false
-	dir.x = Input.get_joy_axis(0, JOY_ANALOG_RX)
-	dir.y = Input.get_joy_axis(0, JOY_ANALOG_RY)
+	dir.x = Input.get_joy_axis(controller, JOY_ANALOG_RX)
+	dir.y = Input.get_joy_axis(controller, JOY_ANALOG_RY)
 	
 	if dir.length() > dead_zone:
 		chg_sprite = true
 		self.position = dir.normalized()*rad
 	
-	cur_state = Input.is_joy_button_pressed(0,JOY_BUTTON_5)
+	cur_state = Input.is_joy_button_pressed(controller,JOY_BUTTON_5)
 	
 	if dir.x < 0 and chg_sprite:
 		self.transform.x.x = -0.1

@@ -3,11 +3,13 @@ extends RigidBody2D
 var movement = 100
 var deadzone = 0.5
 
+var controller = null
 var hp = 1
 var pol = 1
 var change_sprite = false
 onready var selected = $Down
 onready var graphics = [$Up,$Sides_up,$Sides,$Sides_down,$Down]
+var may_move = true
  
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -15,19 +17,21 @@ func _ready():
 	self.mode = MODE_CHARACTER
 	self.linear_damp = 10
 	self.mass = 10
-	
-func _physics_process(delta):
 	self.gravity_scale = 0
 	
-	if self.linear_velocity.length() <= (1.1*movement) and self.applied_force.length() == 0:
+func _physics_process(delta):
+	if self.linear_velocity.length() < 0.5*movement:
+		may_move = true
+	
+	if self.linear_velocity.length() <= (1.1*movement) and may_move:
 		self.linear_velocity = get_input()
 
 func get_input():
 	change_sprite = true
 	var motion = Vector2(0,0)
 	if Input.get_connected_joypads().size() > 0:
-		motion.x = Input.get_joy_axis(0,JOY_ANALOG_LX)
-		motion.y = Input.get_joy_axis(0,JOY_ANALOG_LY)
+		motion.x = Input.get_joy_axis(controller,JOY_ANALOG_LX)
+		motion.y = Input.get_joy_axis(controller,JOY_ANALOG_LY)
 		
 		var sec_vec = motion
 	
@@ -52,6 +56,7 @@ func get_input():
 	return motion.normalized()*movement
 	
 func hit(dir):
+	may_move = false
 	hp -= 0.1
 	self.linear_velocity = dir*movement+dir*30/hp
 	if hp == 0:
