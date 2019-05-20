@@ -6,13 +6,13 @@ var collision = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	self.mode = MODE_KINEMATIC
-	self.rotation = 2
 	self.contact_monitor = true
 	self.contacts_reported = 3
 	self.gravity_scale = 0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
+	self.get_child(0).rotate(PI/32)
 	collision = get_colliding_bodies()
 	if collision != []:
 		for collider in collision:

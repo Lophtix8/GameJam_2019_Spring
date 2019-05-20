@@ -256,7 +256,6 @@ texture = ExtResource( 4 )
 [node name="Move" type="AnimatedSprite" parent="Player1/Up"]
 visible = false
 frames = SubResource( 2 )
-frame = 1
 playing = true
 
 [node name="Sides_up" type="Node2D" parent="Player1"]
@@ -273,7 +272,6 @@ playing = true
 [node name="Move" type="AnimatedSprite" parent="Player1/Sides_up"]
 visible = false
 frames = SubResource( 4 )
-frame = 1
 playing = true
 
 [node name="Sides" type="Node2D" parent="Player1"]
@@ -288,7 +286,7 @@ texture = ExtResource( 11 )
 [node name="Move" type="AnimatedSprite" parent="Player1/Sides"]
 visible = false
 frames = SubResource( 5 )
-frame = 2
+frame = 1
 playing = true
 
 [node name="Sides_down" type="Node2D" parent="Player1"]
@@ -304,7 +302,6 @@ playing = true
 [node name="Move" type="AnimatedSprite" parent="Player1/Sides_down"]
 visible = false
 frames = SubResource( 7 )
-frame = 1
 playing = true
 
 [node name="Down" type="Node2D" parent="Player1"]
@@ -318,7 +315,6 @@ frames = SubResource( 8 )
 [node name="Move" type="AnimatedSprite" parent="Player1/Down"]
 visible = false
 frames = SubResource( 9 )
-frame = 1
 playing = true
 
 [node name="Player2" type="RigidBody2D" parent="."]
@@ -350,6 +346,7 @@ texture = ExtResource( 4 )
 [node name="Move" type="AnimatedSprite" parent="Player2/Up"]
 visible = false
 frames = SubResource( 2 )
+frame = 1
 playing = true
 
 [node name="Sides_up" type="Node2D" parent="Player2"]
@@ -365,6 +362,7 @@ playing = true
 [node name="Move" type="AnimatedSprite" parent="Player2/Sides_up"]
 visible = false
 frames = SubResource( 4 )
+frame = 1
 playing = true
 
 [node name="Sides" type="Node2D" parent="Player2"]
@@ -379,7 +377,6 @@ texture = ExtResource( 11 )
 [node name="Move" type="AnimatedSprite" parent="Player2/Sides"]
 visible = false
 frames = SubResource( 5 )
-frame = 1
 playing = true
 
 [node name="Sides_down" type="Node2D" parent="Player2"]
@@ -396,6 +393,7 @@ playing = true
 [node name="Move" type="AnimatedSprite" parent="Player2/Sides_down"]
 visible = false
 frames = SubResource( 7 )
+frame = 1
 playing = true
 
 [node name="Down" type="Node2D" parent="Player2"]
@@ -409,6 +407,7 @@ frames = SubResource( 8 )
 [node name="Move" type="AnimatedSprite" parent="Player2/Down"]
 visible = false
 frames = SubResource( 9 )
+frame = 1
 playing = true
 
 [node name="TileMap" type="TileMap" parent="."]
